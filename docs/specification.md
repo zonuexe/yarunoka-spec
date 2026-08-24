@@ -667,9 +667,9 @@ At the edges of the domain, evaluation ends rather than fails:
   fails the whole guard**, and it fails before `not` applies — "no such
   day" is not a falsehood for `not` to turn into a match
 
-A query is answered on the domain: its endpoints are **cut to the
-domain, on the same wall-clock axis**, and only the overlap is
-evaluated. The bounds of the cut are the instants of 0001-01-01 00:00
+A well-formed query (see below) is answered on the domain: its
+endpoints are **cut to the domain, on the same wall-clock axis**, and
+only the overlap is evaluated. The bounds of the cut are the instants of 0001-01-01 00:00
 and 10000-01-01 00:00 on the document timezone's clock, so an
 occurrence whose instant exceeds the domain by the zone offset is not
 lost. Whether there is an overlap is decided on the endpoints as
@@ -712,6 +712,38 @@ For each schedule:
 7. **Union across schedules** — the document's set is the union of the
    schedules' occurrences, with duplicates collapsing within each kind
    (timed / all-day) as defined in the document model
+
+### Query well-formedness
+
+The judgment over a period and the enumeration each name two
+endpoints, and both require **start ≤ end** — a period's previous run
+must not lie after its "now", and an enumeration's a must not lie
+after its b. The comparison is between the instants as given: nothing
+is rounded, and equal means exactly equal. The check reads the
+endpoints **before they are cut to the date domain** — cut first, a
+reversed pair lying outside the domain would collapse into an empty
+overlap and pass as a legal empty query.
+
+A violation is a **malformed query** — an error of a kind distinct
+from document invalidity. The document stays valid; the question is
+the side that does not stand. A reversed period arises only from
+broken caller state or from a clock that moved backwards, and an
+empty answer would hide exactly that — which is why the answer is an
+error, not false. How an implementation surfaces the error — an
+exception, a response shape — is implementation API, outside this
+language.
+
+Equal endpoints are legal. Zero width is reached by the normal period
+contract — each judgment's "now" is the next one's start, so a caller
+asking twice within the same second must not be punished. The meaning
+follows from each query's interval: a period over (t, t] holds no
+instant and answers false; an enumeration over [t, t] answers with
+what stands exactly at that point — the timed occurrence at that
+instant, and the all-day occurrence of the day it falls in, all-day
+first, per the existing order.
+
+The judgment at a point takes a single instant. It has no endpoints
+to order, and this section does not apply to it.
 
 ### Queries
 
