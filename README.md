@@ -17,8 +17,8 @@ Language implementations conform to what is defined here.
 
 ## Versioning
 
-The spec version is an `x.y` string: `y` changes are compatible additions,
-`x` changes are breaking. A document declares the version it is written
+The spec version is an `x.y` string: `y` changes keep every existing
+document accepted with its meaning unchanged, `x` changes are breaking. A document declares the version it is written
 against in its `version` field. See the
 [Versioning section](docs/specification.md#versioning) of the
 specification.
