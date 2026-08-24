@@ -516,7 +516,9 @@ shift: [direction, "or_same"?, landing condition]
 - The maximum displacement of a shift is **366 calendar days**; with
   `or_same`, displacement zero (the base day itself) is tested first. A
   base day whose landing condition never holds within that range produces
-  no occurrences — it does not invalidate the document
+  no occurrences — it does not invalidate the document. The edge of the
+  date domain bounds the search the same way: a search that would leave
+  it stops with no landing (see the evaluation model)
 
 ### if — filtering by the day itself or a neighbour
 
@@ -606,7 +608,9 @@ The third form, for intervals that do not decompose into days and times
 - The points are **from + k × interval** (k = 0, 1, 2, …); `from` is the
   first point. The row is laid out by wall-clock arithmetic and each point
   resolved per RFC 5545 §3.3.5. **It keeps counting across days — unlike
-  the clock grid there is no per-day re-anchoring**
+  the clock grid there is no per-day re-anchoring.** The row is not
+  endless: it ends at the date domain, generating no point on a day past
+  9999-12-31 (see the evaluation model)
 - **`from` is required** (a sequence has no definition without its
   anchor). `until` is optional and clips [from, until) as everywhere else
 - The unit is `"hour" | "minute" | "second"` (singular, fixed); the count
@@ -631,10 +635,47 @@ The third form, for intervals that do not decompose into days and times
 
 ## Evaluation model
 
-The sections above define each construct; this section fixes the order in
-which they combine. The order defines the **observable result** only — an
-implementation may compute it however it likes, as long as the outcome is
-identical.
+The sections above define each construct; this section fixes the domain
+evaluation works in and the order in which the constructs combine. The
+order defines the **observable result** only — an implementation may
+compute it however it likes, as long as the outcome is identical.
+
+### The date domain
+
+The days evaluation works over form a closed set — the **date domain**:
+0001-01-01 through 9999-12-31, in the proleptic Gregorian calendar of
+the document model. The input side of the language already stays inside
+it (`years` caps at 9999, and a date literal writes a four-digit year);
+the domain closes the evaluation side to match. Every day evaluation
+touches, and the day of every occurrence, lies in the domain.
+
+The domain closes on **calendar days, read on the document timezone's
+clock** — not on instants. An occurrence's instant may exceed the
+domain by the zone offset (a timed occurrence at 9999-12-31 23:00 in a
+UTC-11 zone is a year-10000 instant); that is accepted. The bound is on
+the day, and the day is in the domain.
+
+At the edges of the domain, evaluation ends rather than fails:
+
+- **A recurrence generates only its intersection with the domain.** A
+  sequence or a row of matching days that would continue past
+  9999-12-31 — or before 0001-01-01 — ends there instead
+- **A `shift` whose search leaves the domain finds no landing.** The
+  base day produces no occurrences and the document stays valid,
+  exactly as when the 366-day cap runs out
+- **An `if` whose `prev` / `next` neighbour lies outside the domain
+  fails the whole guard**, and it fails before `not` applies — "no such
+  day" is not a falsehood for `not` to turn into a match
+
+A query is answered on the domain: its endpoints are **cut to the
+domain, on the same wall-clock axis**, and only the overlap is
+evaluated. The bounds of the cut are the instants of 0001-01-01 00:00
+and 10000-01-01 00:00 on the document timezone's clock, so an
+occurrence whose instant exceeds the domain by the zone offset is not
+lost. An endpoint beyond a bound moves to that bound; a query lying
+entirely outside the domain answers empty — never an error.
+
+### The order of combination
 
 For each schedule:
 
@@ -668,6 +709,8 @@ For each schedule:
 7. **Union across schedules** — the document's set is the union of the
    schedules' occurrences, with duplicates collapsing within each kind
    (timed / all-day) as defined in the document model
+
+### Queries
 
 A judgment at a point asks: is the given instant an occurrence? For a
 timed occurrence the answer is instant equality — the given instant,
