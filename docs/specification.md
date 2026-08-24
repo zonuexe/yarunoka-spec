@@ -672,8 +672,11 @@ domain, on the same wall-clock axis**, and only the overlap is
 evaluated. The bounds of the cut are the instants of 0001-01-01 00:00
 and 10000-01-01 00:00 on the document timezone's clock, so an
 occurrence whose instant exceeds the domain by the zone offset is not
-lost. An endpoint beyond a bound moves to that bound; a query lying
-entirely outside the domain answers empty — never an error.
+lost. Whether there is an overlap is decided on the endpoints as
+given: a query lying entirely outside the domain answers empty — never
+an error. Only when the query overlaps the domain does an endpoint
+beyond a bound move to that bound, so the cut cannot turn an outside
+query into one standing at the boundary.
 
 ### The order of combination
 
