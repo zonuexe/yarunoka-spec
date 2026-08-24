@@ -125,16 +125,47 @@ The language never reads them (see the annotations section).
 The spec version is an `"x.y"` string, and the `version` field of a
 document declares which spec version it is written against.
 
-- **y is raised** for backward-compatible changes: additions to closed
-  sets (new vocabulary, atoms, or fields) that leave the meaning of every
-  existing document unchanged. An implementation of 1.y′ accepts documents
-  written against 1.y, where y′ > y, with the same meaning
+- **y is raised** for backward-compatible revisions. A y-raise may
+  contain additions to closed sets (new vocabulary, atoms, or fields),
+  determinations of behavior the previous version left undefined, and
+  restrictions that bind only documents declaring the new version. All
+  three keep the guarantee: an implementation of 1.y′ accepts documents
+  written against 1.y, where y′ > y, with their meaning unchanged
 - **x is raised** for breaking changes. Compatibility with documents
   written against a lower major version is not guaranteed
 - An implementation must reject a document whose declared version it does
   not know
 
-The first public version is 1.0.
+**Validity follows the declared version.** An implementation validates a
+document under the rules of the version the document declares: a
+document declaring `"1.0"` keeps 1.0's validity rules, however new the
+implementation reading it. A restriction introduced by a later version
+therefore never rejects an older document — it binds only documents
+that declare the version that introduced it, or a newer one.
+
+**Evaluation semantics are one.** The evaluation model applies as this
+document states it to every accepted document, whatever version it
+declares. A determination of behavior an earlier version left undefined
+therefore reaches documents declaring that earlier version too. That
+keeps the acceptance guarantee: what was defined stays as it was, and
+what was undefined had no meaning to preserve.
+
+**A serializer keeps the declared version.** Reading a 1.0 document and
+writing it back yields a 1.0 document; round-tripping never upgrades.
+Moving a document to a newer version is a separate, explicit migration
+step — one this specification does not require implementations to
+provide. What it provides instead is the correspondence below, which is
+what migration tooling works from.
+
+The first public version is 1.0. **1.0 is deprecated**: new documents
+should declare 1.1. Implementations keep accepting 1.0 documents — the
+acceptance obligation ends only at a major raise.
+
+### Correspondence between 1.0 and 1.1
+
+For each spelling that 1.1 no longer accepts, this listing states what
+it meant in 1.0 and how the same meaning is written in 1.1. Migration
+tooling works from this listing.
 
 ## Annotations — label and description
 
