@@ -126,8 +126,9 @@ here, language implementations conform to it, and their agreement is
 checked by a shared conformance suite rather than by comparing
 implementations to each other. What the specification guarantees
 between implementations is document compatibility: every
-implementation reads the same document as the same schedule, and
-conforming implementations are then expected — as a consequence, not
-a promise — to agree on the occurrences. That is the goal: write a
+implementation that knows the declared version reads the same
+document as the same schedule, and conforming implementations are
+then expected — as a consequence, not a promise — to agree on the
+occurrences. That is the goal: write a
 schedule once, and store, ship, and judge it across the runtimes of
 one product.
