@@ -105,6 +105,10 @@ The language never reads them (see the annotations section).
   `workweek`, `business_hours`, and `resolvers` must be non-empty when
   present, and `schedules` must be non-empty. Date lists **may** be empty
   — an explicit empty list is the statement that there are no such days
+- Empty objects are invalid too: a `calendar` and a `date_sets` must
+  hold at least one entry when present. A document with no definitions
+  omits the key rather than writing `{}`, so that "no definitions" has a
+  single spelling — the rule `resolvers` already states for its list
 - The whole DSL denotes a set of **occurrences**. An occurrence is either
   **timed** (an instant) or **all-day** (a whole day; time does not apply
   to it). The two kinds never merge: an all-day occurrence and a timed
@@ -166,6 +170,13 @@ acceptance obligation ends only at a major raise.
 For each spelling that 1.1 no longer accepts, this listing states what
 it meant in 1.0 and how the same meaning is written in 1.1. Migration
 tooling works from this listing.
+
+- **An empty `calendar` or `date_sets` object.** In 1.0,
+  `"calendar": {}` and `"date_sets": {}` are valid and mean the same as
+  omitting the key. 1.1 rejects both; the meaning is written by omitting
+  the key. The removal cascades: omitting a `date_sets` that was the
+  calendar's only entry leaves `"calendar": {}` behind, which 1.1
+  rejects too, so that calendar is omitted as well
 
 ## Annotations — label and description
 
