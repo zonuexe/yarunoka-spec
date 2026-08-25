@@ -174,7 +174,9 @@ tooling works from this listing.
 - **An empty `calendar` or `date_sets` object.** In 1.0,
   `"calendar": {}` and `"date_sets": {}` are valid and mean the same as
   omitting the key. 1.1 rejects both; the meaning is written by omitting
-  the key
+  the key. The removal cascades: omitting a `date_sets` that was the
+  calendar's only entry leaves `"calendar": {}` behind, which 1.1
+  rejects too, so that calendar is omitted as well
 
 ## Annotations — label and description
 
