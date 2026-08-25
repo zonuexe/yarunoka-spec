@@ -180,6 +180,14 @@ tooling works from this listing.
   the key. The removal cascades: omitting a `date_sets` that was the
   calendar's only entry leaves `"calendar": {}` behind, which 1.1
   rejects too, so that calendar is omitted as well
+- **A day-cycle or sequence `every` count beyond its bound.** In 1.0
+  the counts have no upper bound; under the closed date domain a count
+  beyond the domain's width yields the anchor point alone — an answer
+  an implementation gives without huge-number arithmetic. 1.1 rejects
+  such a count (the bounds and their derivation are in the day-cycle
+  and sequence sections). The same meaning — a single occurrence at the
+  anchor — is written with an `until` that ends the range before the
+  second point
 
 ## Annotations — label and description
 
