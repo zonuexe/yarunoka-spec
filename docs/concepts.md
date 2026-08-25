@@ -26,7 +26,9 @@ Cron expressions and plain timestamps cannot carry such rules, so the
 rules end up as application code — a shift rule here, a holiday lookup
 there. Code in that position is hard to store, hard to display back to
 the person who asked for the rule, and impossible for them to edit
-safely. Yarunoka began inside a larger application whose schedules were
+safely. And it multiplies: where one product spans several runtimes —
+a frontend, a backend, an app — the same rules are written again for
+each. Yarunoka began inside a larger application whose schedules were
 exactly these ordinary calendar rules, and nothing about them was
 specific to that application — so the language was extracted and
 specified on its own.
@@ -73,7 +75,9 @@ to be decided.
 
 A document declares how to read it. The timezone is written in the
 document — the host's locale or default timezone never changes what a
-schedule means. The spec version is written in the document, and an
+schedule means. What the zone name denotes — the wall-to-instant
+mapping — comes from the implementation's tz database. The spec
+version is written in the document, and an
 implementation that does not know that version must reject the document
 rather than guess.
 
@@ -120,7 +124,10 @@ explicit list of such deliberate omissions.
 Yarunoka puts the specification at the top: the language is defined
 here, language implementations conform to it, and their agreement is
 checked by a shared conformance suite rather than by comparing
-implementations to each other. Two programs in different languages
-reading the same document reach the same set of occurrences because
-both answer to this specification — and that is what lets a schedule
-written once be stored, shipped, and judged anywhere.
+implementations to each other. What the specification guarantees
+between implementations is document compatibility: every
+implementation reads the same document as the same schedule, and
+conforming implementations are then expected — as a consequence, not
+a promise — to agree on the occurrences. That is the goal: write a
+schedule once, and store, ship, and judge it across the runtimes of
+one product.
