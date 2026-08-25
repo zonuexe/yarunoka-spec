@@ -6,13 +6,13 @@ sidebar:
 ---
 
 Yrnk is a JSON DSL for describing calendar-aware schedules. **Yrnk** is
-short for Yarunoka: Yarunoka is the project, and Yrnk is the notation. The
-JSON Schemas under
+short for Yarunoka: Yarunoka is the project, and Yrnk is the notation.
+This document defines the language — its syntax and its semantics — and
+is the source of authority. The JSON Schemas under
 [`schema/`](https://github.com/yarunoka-dev/spec/tree/1.0/schema)
-(JSON Schema draft 2020-12)
-define the structural syntax; this document defines the language — its
-syntax and its semantics. Implementations must conform to both, and their
-agreement is verified by tests.
+(JSON Schema draft 2020-12) are its supporting artifact: a
+machine-readable rendition of what they can express. Implementations
+must conform to both, and their agreement is verified by tests.
 
 A Yrnk document is a **description of a set of occurrences** — points in
 time, or whole days — and knows nothing about execution. "Should this fire", "last run at", and
@@ -100,7 +100,10 @@ The language never reads them (see the annotations section).
   ordinal and day-cycle tuples, both `every` forms, a window) hold
   fixed-arity tuples whose elements are read by position, as defined in
   their sections
-- Dates follow the **proleptic Gregorian calendar**; years run 1–9999
+- Dates follow the **proleptic Gregorian calendar**; years run 1–9999.
+  Every date literal must denote a real date (`2026-02-30` is
+  well-formed but invalid), and the date part of `from` / `until`
+  follows the same rule
 - Enumerations reject duplicate members. The date axes, a `times` list,
   `workweek`, `business_hours`, and `resolvers` must be non-empty when
   present, and `schedules` must be non-empty. Date lists **may** be empty
@@ -258,9 +261,10 @@ leaving it to be discovered.
 
 How a host materializes a resolver — the call signature, and whether a
 relevant range is communicated — is implementation API, outside this
-language. Implementations validate that what a resolver yields is a list
-of date literals (`YYYY-MM-DD`); a resolver that fails at call time is a
-host-side runtime error, not a document validation error.
+language. Implementations validate that the host binds every declared
+name, and that what a resolver yields is a list of date literals
+(`YYYY-MM-DD`); a resolver that fails at call time is a host-side
+runtime error, not a document validation error.
 
 ## calendar — the definitions
 
@@ -592,6 +596,8 @@ Semantics:
   document validation error
 - `"24:00"` is a token allowed only as a window end. Windows that cross
   midnight (start ≥ end) cannot be written
+- The windows of a window list must not overlap (half-open, so touching
+  is legal)
 - Times are **zero-padded HH:MM, fixed** (`"0:00"` is invalid; seconds
   cannot be written)
 - An `allday` occurrence is a **day-level occurrence: time does not apply
@@ -820,29 +826,6 @@ real need appears.
 - **Windows that cross midnight**, **per-weekday business hours**,
   **user-defined window names**, **definition macros** (names referring
   to names)
-
-## Constraints beyond the schema
-
-The following constraints are validated by implementations in addition to
-structural JSON Schema validation. Some may be expressible in JSON Schema,
-but they are defined here as semantic validation rules:
-
-- Resolvability of every name: a name used in the document is either a
-  `date_sets` entry or declared under `resolvers`, no name is both, and
-  every declared name is bound by the host
-- Presence of the calendar entries required by the calendar vocabulary in
-  use
-- start < end for every time window, and non-overlap between windows
-  (half-open, so touching is legal)
-- Every date literal is a real date (`2026-02-30` is well-formed but
-  invalid); the date part of `from` / `until` likewise
-- The resolved instant of `from` is strictly earlier than the resolved
-  instant of `until`
-- Presence of `from` in a schedule that uses `["every", N, "day"]`
-  (cross-field constraints are outside the schema's reach; the `from` of
-  the interval `every` is required by the schema as well)
-- Existence of the timezone name in the IANA Time Zone Database (as
-  available to the implementation); fixed-offset strings are rejected
 
 ## Examples
 
