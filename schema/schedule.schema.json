@@ -55,6 +55,11 @@
             ]}
         }
     ],
+    "if": {
+        "properties": {"days": {"contains": {"$ref": "#/$defs/dayCycle"}}},
+        "required": ["days"]
+    },
+    "then": {"required": ["from"]},
     "$defs": {
         "dateTime": {
             "type": "string",
