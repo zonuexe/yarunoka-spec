@@ -24,6 +24,10 @@ differs, the specification governs.
 Unknown keys are an error at every level — document, calendar,
 schedule, and the times object.
 
+Duplicate member names are an error in every object, names compared
+after escape resolution (`"timezone"` and `"\u0074imezone"` are the
+same name).
+
 ## Calendar keys
 
 | Key | Value | Role |
