@@ -224,24 +224,6 @@ holidays business_holidays business_days workweek business_hours date_sets
 label description
 ```
 
-## Validation beyond the schema
-
-In addition to structural JSON Schema validation, implementations
-validate:
-
-- every used name resolves — a `date_sets` entry or a declared
-  resolver; no name is both; every declared name is bound by the host
-- the calendar entries required by the calendar vocabulary in use are
-  present
-- start < end for every window, and windows do not overlap
-- every date literal is a real date (`2026-02-30` is well-formed but
-  invalid)
-- the resolved instant of `from` is strictly earlier than the resolved
-  instant of `until`
-- `from` is present in a schedule that uses `["every", N, "day"]`
-- the timezone name exists in the IANA Time Zone Database as available
-  to the implementation; fixed-offset strings are rejected
-
 ## Deliberately unsupported
 
 Year cycles · relative intervals ("N seconds since the last run") ·

@@ -21,8 +21,8 @@ it exposes is pure: it executes nothing and stores nothing.
   validation needs no network and pins the exact spec version
 - **Semantics** — the [specification](../specification/) defines what a
   document means. Validation is two stages: structural validation
-  against the schemas, plus the semantic rules of the specification's
-  "Constraints beyond the schema" section, applied at parse time
+  against the schemas, plus the specification's rules that the schemas
+  cannot express, applied at parse time
 - A document whose declared `version` the implementation does not know
   must be rejected, never guessed at
 

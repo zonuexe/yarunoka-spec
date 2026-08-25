@@ -827,29 +827,6 @@ real need appears.
   **user-defined window names**, **definition macros** (names referring
   to names)
 
-## Constraints beyond the schema
-
-The following constraints are validated by implementations in addition to
-structural JSON Schema validation. Some may be expressible in JSON Schema,
-but they are defined here as semantic validation rules:
-
-- Resolvability of every name: a name used in the document is either a
-  `date_sets` entry or declared under `resolvers`, no name is both, and
-  every declared name is bound by the host
-- Presence of the calendar entries required by the calendar vocabulary in
-  use
-- start < end for every time window, and non-overlap between windows
-  (half-open, so touching is legal)
-- Every date literal is a real date (`2026-02-30` is well-formed but
-  invalid); the date part of `from` / `until` likewise
-- The resolved instant of `from` is strictly earlier than the resolved
-  instant of `until`
-- Presence of `from` in a schedule that uses `["every", N, "day"]`
-  (cross-field constraints are outside the schema's reach; the `from` of
-  the interval `every` is required by the schema as well)
-- Existence of the timezone name in the IANA Time Zone Database (as
-  available to the implementation); fixed-offset strings are rejected
-
 ## Examples
 
 Unless noted otherwise, the following values are complete schedule
