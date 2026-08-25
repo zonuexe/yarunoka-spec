@@ -125,7 +125,8 @@ identifiers (no uniqueness, no referring to a schedule by label).
 
 - Ordinals: `"1st"` `"2nd"` `"3rd"` `"4th"` `"5th"` `"last"`
 - Day names: `"mon"` `"tue"` `"wed"` `"thu"` `"fri"` `"sat"` `"sun"`
-- The day-cycle count is an integer ≥ 1; the unit is the fixed `"day"`.
+- The day-cycle count is an integer ≥ 1, at most 3,652,058 (bounded by
+  the date domain); the unit is the fixed `"day"`.
   The tuple is allowed only as an element of `days`, not as a `shift`
   landing condition or an `if` condition
 - A date literal cannot be written in `days` — give the date a name

@@ -438,8 +438,10 @@ the matching days); points outside the range simply do not exist.
   decided by `times` (the time part of `from` only clips the range: with
   `from` at 7/14 12:00 and `times` 03:00, 7/14 03:00 is out of range and
   the first point is 7/16 03:00)
-- The count is an integer ≥ 1 with no upper bound (`["every", 1, "day"]`
-  = every day from the `from` date). The unit is fixed and explicit:
+- The count is an integer ≥ 1 (`["every", 1, "day"]` = every day from
+  the `from` date). The maximum count is 3,652,058 — the largest count
+  whose second matching day stays inside the date domain (see the
+  evaluation model) when `from` sits at its lower end. The unit is fixed and explicit:
   `"day"` (as with the times `every`, the unit is never sometimes-written,
   sometimes-not). A future year cycle would have a syntactic home as
   `["every", 2, "year"]`

@@ -72,7 +72,7 @@
             "type": "array",
             "prefixItems": [
                 {"const": "every"},
-                {"type": "integer", "minimum": 1},
+                {"type": "integer", "minimum": 1, "maximum": 3652058},
                 {"const": "day"}
             ],
             "minItems": 3,
