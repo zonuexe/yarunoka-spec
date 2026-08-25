@@ -72,7 +72,7 @@
             "type": "array",
             "prefixItems": [
                 {"const": "every"},
-                {"type": "integer", "minimum": 1},
+                {"type": "integer", "minimum": 1, "maximum": 3652058},
                 {"const": "day"}
             ],
             "minItems": 3,
@@ -80,14 +80,38 @@
             "items": false
         },
         "sequenceEvery": {
-            "type": "array",
-            "prefixItems": [
-                {"type": "integer", "minimum": 1},
-                {"enum": ["hour", "minute", "second"]}
-            ],
-            "minItems": 2,
-            "maxItems": 2,
-            "items": false
+            "oneOf": [
+                {
+                    "type": "array",
+                    "prefixItems": [
+                        {"type": "integer", "minimum": 1, "maximum": 87649415},
+                        {"const": "hour"}
+                    ],
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": false
+                },
+                {
+                    "type": "array",
+                    "prefixItems": [
+                        {"type": "integer", "minimum": 1, "maximum": 5258964959},
+                        {"const": "minute"}
+                    ],
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": false
+                },
+                {
+                    "type": "array",
+                    "prefixItems": [
+                        {"type": "integer", "minimum": 1, "maximum": 315537897599},
+                        {"const": "second"}
+                    ],
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": false
+                }
+            ]
         },
 
         "ordinal": {"enum": ["1st", "2nd", "3rd", "4th", "5th", "last"]},

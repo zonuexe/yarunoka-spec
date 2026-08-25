@@ -180,6 +180,14 @@ tooling works from this listing.
   the key. The removal cascades: omitting a `date_sets` that was the
   calendar's only entry leaves `"calendar": {}` behind, which 1.1
   rejects too, so that calendar is omitted as well
+- **A day-cycle or sequence `every` count beyond its bound.** In 1.0
+  the counts have no upper bound; under the closed date domain a count
+  beyond the domain's width yields the anchor point alone — an answer
+  an implementation gives without huge-number arithmetic. 1.1 rejects
+  such a count (the bounds and their derivation are in the day-cycle
+  and sequence sections). The same meaning — a single occurrence at the
+  anchor — is written with an `until` that ends the range before the
+  second point
 
 ## Annotations — label and description
 
@@ -438,11 +446,20 @@ the matching days); points outside the range simply do not exist.
   decided by `times` (the time part of `from` only clips the range: with
   `from` at 7/14 12:00 and `times` 03:00, 7/14 03:00 is out of range and
   the first point is 7/16 03:00)
-- The count is an integer ≥ 1 with no upper bound (`["every", 1, "day"]`
-  = every day from the `from` date). The unit is fixed and explicit:
-  `"day"` (as with the times `every`, the unit is never sometimes-written,
-  sometimes-not). A future year cycle would have a syntactic home as
-  `["every", 2, "year"]`
+- The count is an integer ≥ 1 (`["every", 1, "day"]` = every day from
+  the `from` date). The maximum count is 3,652,058 — the largest count
+  whose second matching day stays inside the date domain (see the
+  evaluation model) when `from` sits at its lower end. The unit is fixed
+  and explicit: `"day"` (as with the times `every`, the unit is never
+  sometimes-written, sometimes-not). A future year cycle would have a
+  syntactic home as `["every", 2, "year"]`
+- A count beyond the bound makes the document **invalid** — the same
+  kind of invalidity as `"months": [13]`, and deliberately not the fate
+  of a `shift` walking out of the date domain, which leaves the document
+  valid: a stray shift is one base day among many, and the document
+  keeps meaning, while every over-bound count collapses to the same
+  behavior — the `from` day alone — so rejecting it forfeits no
+  expressiveness and frees implementations from huge-number arithmetic
 - `years` / `months` / `if` only **filter** the matching days; the count is
   not reset (excluded days do not shift the cycle). `shift` moves each
   matching day as a base day
@@ -631,9 +648,15 @@ The third form, for intervals that do not decompose into days and times
 - **`from` is required** (a sequence has no definition without its
   anchor). `until` is optional and clips [from, until) as everywhere else
 - The unit is `"hour" | "minute" | "second"` (singular, fixed); the count
-  is an integer ≥ 1 with **no upper bound** — the grid's one-day cap is a
+  is an integer ≥ 1. The maximum count is 87,649,415 for `"hour"`,
+  5,258,964,959 for `"minute"`, and 315,537,897,599 for `"second"` — for
+  each unit, the largest count whose second point stays inside the date
+  domain when `from` sits at its lower end. The grid's one-day cap is a
   consequence of its per-day re-anchoring semantics and does not apply to
-  a from-anchored sequence
+  a from-anchored sequence; what bounds this count is the date domain
+- A count beyond its bound makes the document **invalid**, for the
+  reason the day-cycle section states — every over-bound count collapses
+  to the same behavior, the anchor point alone
 - The unit `"day"` is invalid here. Whole-day cycles belong to the
   calendar vocabulary (the `["every", N, "day"]` atom × `times`), and
   `from` + `every` 48 hour is **not** a substitute for "every 2 days at
