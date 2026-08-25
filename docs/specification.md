@@ -88,6 +88,15 @@ The language never reads them (see the annotations section).
   in effect before the transition, which pushes it forward in real time; a
   time that occurs twice (the fall-back overlap) counts only as its first
   occurrence
+- Zone names are **borrowed vocabulary**: Yrnk takes the names from
+  the IANA Time Zone Database, and nothing more. What a name denotes —
+  which wall-clock time maps to which instant — is the
+  implementation's answer, given through its tz database; this
+  specification does not pick a release. Where an implementation
+  relies on a tz database, differing releases give differing answers
+  for the zones and periods whose offset rules were revised, so
+  agreement on that resolution between implementations is not
+  guaranteed
 - Arrays appear in two roles, distinguished by position. **List positions**
   (`years` / `months` / `days`, a `times` list, `workweek`,
   `business_hours`, date lists, `resolvers`, `schedules`) hold
