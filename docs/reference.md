@@ -86,6 +86,8 @@ required definitions is a document validation error.
 - A schedule with a top-level `every` takes no `years` / `months` /
   `days` / `shift` / `if`, and requires `from`
 - `from` is also required by the `["every", N, "day"]` day atom
+- With both `from` and `until`, the resolved instant of `from` must be
+  strictly earlier
 - An omitted date axis means no restriction on that axis
 - The algebra: within an axis's array — OR; between fields — AND;
   between schedules — OR
@@ -192,7 +194,7 @@ counting across days with no per-day re-anchoring.
 | Date | `"YYYY-MM-DD"` | Proleptic Gregorian; years 1–9999; must be a real date |
 | Time | `"HH:MM"` | Zero-padded; no seconds; `"24:00"` is a token allowed only as a window end |
 | Window | `["HH:MM", "HH:MM"]` | Half-open [start, end); start < end; windows must not overlap (touching is legal); cannot cross midnight |
-| Date-time | `"YYYY-MM-DD HH:MM"` | The `from` / `until` form; zero-padded, a single space (U+0020), no seconds, no `24:00` |
+| Date-time | `"YYYY-MM-DD HH:MM"` | The `from` / `until` form; zero-padded, a single space (U+0020), no seconds, no `24:00`; the date part must be a real date |
 | Timezone | IANA name | `"Asia/Tokyo"`, `"UTC"`; fixed offsets (`"+09:00"`) are rejected |
 | Version | `"x.y"` | |
 | Day of week | `"mon"`–`"sun"` | |

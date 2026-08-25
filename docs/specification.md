@@ -100,7 +100,10 @@ The language never reads them (see the annotations section).
   ordinal and day-cycle tuples, both `every` forms, a window) hold
   fixed-arity tuples whose elements are read by position, as defined in
   their sections
-- Dates follow the **proleptic Gregorian calendar**; years run 1–9999
+- Dates follow the **proleptic Gregorian calendar**; years run 1–9999.
+  Every date literal must denote a real date (`2026-02-30` is
+  well-formed but invalid), and the date part of `from` / `until`
+  follows the same rule
 - Enumerations reject duplicate members. The date axes, a `times` list,
   `workweek`, `business_hours`, and `resolvers` must be non-empty when
   present, and `schedules` must be non-empty. Date lists **may** be empty
@@ -258,9 +261,10 @@ leaving it to be discovered.
 
 How a host materializes a resolver — the call signature, and whether a
 relevant range is communicated — is implementation API, outside this
-language. Implementations validate that what a resolver yields is a list
-of date literals (`YYYY-MM-DD`); a resolver that fails at call time is a
-host-side runtime error, not a document validation error.
+language. Implementations validate that the host binds every declared
+name, and that what a resolver yields is a list of date literals
+(`YYYY-MM-DD`); a resolver that fails at call time is a host-side
+runtime error, not a document validation error.
 
 ## calendar — the definitions
 
@@ -592,6 +596,8 @@ Semantics:
   document validation error
 - `"24:00"` is a token allowed only as a window end. Windows that cross
   midnight (start ≥ end) cannot be written
+- The windows of a window list must not overlap (half-open, so touching
+  is legal)
 - Times are **zero-padded HH:MM, fixed** (`"0:00"` is invalid; seconds
   cannot be written)
 - An `allday` occurrence is a **day-level occurrence: time does not apply
