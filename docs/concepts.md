@@ -90,17 +90,19 @@ to be true when it was written.
 
 Yrnk is strict on purpose:
 
-- every meaning has exactly **one spelling** — no scalar shorthand for
+- the same value has exactly **one spelling** — no scalar shorthand for
   one-element lists, zero-padded times, a single way to write "requires
   nothing"
 - every vocabulary is a **closed set** — unknown keys and unknown words
   are errors, never silently ignored
 
-One spelling means round-tripping a valid document is the identity,
-which gives implementations a canonical form to be checked against,
-mechanically. Closed sets mean a mistake cannot be quietly read as
-something else — and they widen compatibly: additions raise the minor
-version, and every existing document keeps its meaning.
+One spelling holds on the write side too: reading a valid document and
+writing it back returns the same JSON — compared as JSON values, so key
+order and whitespace do not matter — which lets a serializer be checked
+against the document as authored, mechanically. Closed sets mean a
+mistake cannot be quietly read as something else — and they widen
+compatibly: additions raise the minor version, and every existing
+document keeps its meaning.
 
 ## Two planes that never cross
 

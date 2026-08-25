@@ -48,8 +48,8 @@ The runner exits non-zero unless every case passes, so this one line is
 the whole CI integration. The modes:
 
 - **eval** — the three queries of the evaluation model
-- **emit** — the round-trip spelling check against the canonical form,
-  for implementations with a serializer
+- **emit** — the round-trip spelling check against the document as
+  authored, for implementations with a serializer
 - **all** — both
 
 ## Claim conformance
