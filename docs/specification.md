@@ -441,10 +441,17 @@ the matching days); points outside the range simply do not exist.
 - The count is an integer ≥ 1 (`["every", 1, "day"]` = every day from
   the `from` date). The maximum count is 3,652,058 — the largest count
   whose second matching day stays inside the date domain (see the
-  evaluation model) when `from` sits at its lower end. The unit is fixed and explicit:
-  `"day"` (as with the times `every`, the unit is never sometimes-written,
-  sometimes-not). A future year cycle would have a syntactic home as
-  `["every", 2, "year"]`
+  evaluation model) when `from` sits at its lower end. The unit is fixed
+  and explicit: `"day"` (as with the times `every`, the unit is never
+  sometimes-written, sometimes-not). A future year cycle would have a
+  syntactic home as `["every", 2, "year"]`
+- A count beyond the bound makes the document **invalid** — the same
+  kind of invalidity as `"months": [13]`, and deliberately not the fate
+  of a `shift` walking out of the date domain, which leaves the document
+  valid: a stray shift is one base day among many, and the document
+  keeps meaning, while every over-bound count collapses to the same
+  behavior — the `from` day alone — so rejecting it forfeits no
+  expressiveness and frees implementations from huge-number arithmetic
 - `years` / `months` / `if` only **filter** the matching days; the count is
   not reset (excluded days do not shift the cycle). `shift` moves each
   matching day as a base day
@@ -639,6 +646,9 @@ The third form, for intervals that do not decompose into days and times
   domain when `from` sits at its lower end. The grid's one-day cap is a
   consequence of its per-day re-anchoring semantics and does not apply to
   a from-anchored sequence; what bounds this count is the date domain
+- A count beyond its bound makes the document **invalid**, for the
+  reason the day-cycle section states — every over-bound count collapses
+  to the same behavior, the anchor point alone
 - The unit `"day"` is invalid here. Whole-day cycles belong to the
   calendar vocabulary (the `["every", N, "day"]` atom × `times`), and
   `from` + `every` 48 hour is **not** a substitute for "every 2 days at
