@@ -6,13 +6,13 @@ sidebar:
 ---
 
 Yrnk is a JSON DSL for describing calendar-aware schedules. **Yrnk** is
-short for Yarunoka: Yarunoka is the project, and Yrnk is the notation. The
-JSON Schemas under
+short for Yarunoka: Yarunoka is the project, and Yrnk is the notation.
+This document defines the language — its syntax and its semantics — and
+is the source of authority. The JSON Schemas under
 [`schema/`](https://github.com/yarunoka-dev/spec/tree/1.0/schema)
-(JSON Schema draft 2020-12)
-define the structural syntax; this document defines the language — its
-syntax and its semantics. Implementations must conform to both, and their
-agreement is verified by tests.
+(JSON Schema draft 2020-12) are its supporting artifact: a
+machine-readable rendition of what they can express. Implementations
+must conform to both, and their agreement is verified by tests.
 
 A Yrnk document is a **description of a set of occurrences** — points in
 time, or whole days — and knows nothing about execution. "Should this fire", "last run at", and

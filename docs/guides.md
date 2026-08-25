@@ -15,10 +15,10 @@ it exposes is pure: it executes nothing and stores nothing.
 
 ## Build against the spec, not another implementation
 
-- **Syntax** — the JSON Schemas under `schema/` are the authoritative
-  structural syntax. An implementation carries a verbatim copy of them
-  (the document schema itself declares this), so validation needs no
-  network and pins the exact spec version
+- **Syntax** — the JSON Schemas under `schema/` render the structural
+  syntax as far as JSON Schema can express it; the specification is the
+  authority. An implementation carries a verbatim copy of them, so
+  validation needs no network and pins the exact spec version
 - **Semantics** — the [specification](../specification/) defines what a
   document means. Validation is two stages: structural validation
   against the schemas, plus the semantic rules of the specification's
