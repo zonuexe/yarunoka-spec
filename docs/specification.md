@@ -633,9 +633,12 @@ The third form, for intervals that do not decompose into days and times
 - **`from` is required** (a sequence has no definition without its
   anchor). `until` is optional and clips [from, until) as everywhere else
 - The unit is `"hour" | "minute" | "second"` (singular, fixed); the count
-  is an integer ≥ 1 with **no upper bound** — the grid's one-day cap is a
+  is an integer ≥ 1. The maximum count is 87,649,415 for `"hour"`,
+  5,258,964,959 for `"minute"`, and 315,537,897,599 for `"second"` — for
+  each unit, the largest count whose second point stays inside the date
+  domain when `from` sits at its lower end. The grid's one-day cap is a
   consequence of its per-day re-anchoring semantics and does not apply to
-  a from-anchored sequence
+  a from-anchored sequence; what bounds this count is the date domain
 - The unit `"day"` is invalid here. Whole-day cycles belong to the
   calendar vocabulary (the `["every", N, "day"]` atom × `times`), and
   `from` + `every` 48 hour is **not** a substitute for "every 2 days at

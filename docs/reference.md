@@ -183,8 +183,9 @@ The grid object:
 `[count, unit]` — the points from + k × interval (k = 0, 1, 2, …),
 counting across days with no per-day re-anchoring.
 
-- Unit: `"hour" | "minute" | "second"`; the count is an integer ≥ 1
-  with no upper bound. The unit `"day"` is invalid here — whole-day
+- Unit and maximum count: `"hour"` 87,649,415, `"minute"`
+  5,258,964,959, `"second"` 315,537,897,599 (bounded by the date
+  domain); the count is an integer ≥ 1. The unit `"day"` is invalid here — whole-day
   cycles are the `["every", N, "day"]` atom combined with `times`
 - `from` is required; `until` is optional
 
