@@ -108,6 +108,12 @@ The language never reads them (see the annotations section).
   `workweek`, `business_hours`, and `resolvers` must be non-empty when
   present, and `schedules` must be non-empty. Date lists **may** be empty
   — an explicit empty list is the statement that there are no such days
+- Objects reject duplicate member names: a document in which any
+  object — the document itself, a `calendar`, a schedule, a
+  `date_sets` — writes the same member name twice is invalid. Names
+  compare after escape resolution (`"timezone"` and `"\u0074imezone"`
+  are the same name): JSON decides member equality on the resolved
+  characters, never on the written bytes
 - Empty objects are invalid too: a `calendar` and a `date_sets` must
   hold at least one entry when present. A document with no definitions
   omits the key rather than writing `{}`, so that "no definitions" has a
